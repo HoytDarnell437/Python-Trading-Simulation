@@ -38,6 +38,8 @@ while True:
     previousResults = 0
     previousSignal = 0
     hasBought = False
+    relativeStrengthIndex = 0
+    atrResults = 1
     buyPrice = 0
     y2 = []
     y3 = []
@@ -51,25 +53,23 @@ while True:
         y3 += [previousSignal]
         riskPerTrade = capital * risk * 0.01
 
-        # calculate rsi
-        if i > 14:
-            relativeStrengthIndex = rsi(closePrices[i - 15 : i])
-        # calculate atr
-        if i > 15:
-            atrResults = atr(highPrices[i - 15 : i], lowPrices[i - 15 : i], closePrices[i - 16 : i - 1])
 
         if i > 26 and action != 0:
-            if (action == 1 and hasBought and relativeStrengthIndex > 30) or (stop <= price and hasBought):
+            relativeStrengthIndex = rsi(closePrices[i - 15 : i])
+            atrResults = atr(highPrices[i - 15 : i], lowPrices[i - 15 : i], closePrices[i - 16 : i - 1])
+
+            if (action == 1 and hasBought and relativeStrengthIndex > 70) or (stop <= price and hasBought):
                 ax.scatter(i, price, color='red',marker='v')
                 totalChange += shares * price - shares * buyPrice
-                capital = shares * price 
+                capital += shares * price 
                 hasBought = False
                 buyPrice = 0
-            elif action == 2 and (not hasBought) and relativeStrengthIndex < 70:
+            elif action == 2 and (not hasBought) and relativeStrengthIndex < 30:
                 ax.scatter(i, price, color='green',marker='^')
-                amountAllowed = riskPerTrade / (2 * atrResults)
-                print(amountAllowed)
-                shares = amountAllowed
+                print("risk per trade: ", riskPerTrade, "\natrResults: ", atrResults)
+                shares = riskPerTrade / (2 * atrResults)
+                print(shares)
+                capital -= shares * price
                 stop = price - 2 * atrResults
                 hasBought = True
                 buyPrice = price
