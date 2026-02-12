@@ -1,13 +1,28 @@
 # testing implementation of the Moving Average Convergence/ Divergence algorithm
 
-def macd(price: float, prevMACD: float, prevSignal: float):
-    # macd function implementation
-    ema12 = ema(price, "ema12", 5)
-    ema26 = ema(price, "ema26", 13)
+def macd(price: float, prevMACD: float, prevSignal: float, sensitivity: int):
+    """
+    Calculate MACD for given parameters intended for use inside of a loop
     
-    difference12_26 = ema12 - ema26
+    :param price: Current price of stock
+    :type price: float
+    :param prevMACD: MACD calculated last iteration
+    :type prevMACD: float
+    :param prevSignal: Signal calculated last iteration
+    :type prevSignal: float
+    :param aggression: How aggressive you want the algorithm to be
+    :type aggression: Int range 0-3
+    :return: 0 is the default return 1 indicates selling is a good idea 2 indicates buying is a good idea
+    :rtype: int
+    """
+    # macd function implementation
+    global sensitivityDICT
+    emaLow = ema(price, "emaLow", sensitivityDict[str(sensitivity)][1])
+    emaHigh = ema(price, "emaHigh", sensitivityDict[str(sensitivity)][2])
+    
+    difference12_26 = emaLow - emaHigh
     results = difference12_26
-    signal = ema(results, "signal", 3)
+    signal = ema(results, "signal", sensitivityDict[str(sensitivity)][0])
 
     if (prevMACD <= prevSignal) and (results > signal):
         action = 2
@@ -16,13 +31,20 @@ def macd(price: float, prevMACD: float, prevSignal: float):
     else:
         action = 0
 
-    return results, signal, action # action 2 is buy, 1 is sell, 0 is neither
+    return action
 
 
 prevEMA = {
-    "ema12": 0.0,
-    "ema26": 0.0,
+    "emaLow": 0.0,
+    "emaHigh": 0.0,
     "signal": 0.0
+}
+
+sensitivityDict = {
+    '0': [18, 24, 52],
+    '1': [9, 12, 26],
+    '2': [5, 5, 35],
+    '3': [3, 5, 13]
 }
 
 def ema(price: float, alphaKey: str, periods: int)->float:
