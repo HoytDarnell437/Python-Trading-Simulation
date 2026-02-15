@@ -11,7 +11,7 @@ from algorithms.testRSI import rsi
 from algorithms.testATR import atr
 from algorithms.testTrade import trade
 
-from helperFuncions import f20050
+from helperFuncions import f2005
 
 while True:
 
