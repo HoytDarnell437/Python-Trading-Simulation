@@ -1,4 +1,4 @@
-# main loop for Testing Trend Direction Methods. Currently utilizing MACD algorithm
+# main loop for Testing trading algorithms. Algorithms currently implemented: macd, rsi, 
 # import libraries
 import yfinance as yf
 import pandas as pd
@@ -6,17 +6,17 @@ import matplotlib.pyplot as plt
 import numpy as np 
 
 # import other files
-from algorithms.testMACD import macd
-from algorithms.testRSI import rsi
-from algorithms.testATR import atr
-from algorithms.testTrade import trade
-
-from tests.algorithms.testGoldenCross import f20050
+from algorithms.macd import macd
+from algorithms.rsi import rsi
+from trade import trade
 
 while True:
 
-    # import stock data
+    # get input from user
     stockSymbol = input("Input stock symbol: ").upper()
+    algorithm = int(input("Input Algorithm Key (0: macd, 1: rsi): "))
+    
+    # import stock data
     ticker = yf.Ticker(stockSymbol)
     data = ticker.history(start = "2025-01-11", interval = "1h") # date to start aquiring data and time interval between samples
     closePrices = data["Close"].tolist()
@@ -39,10 +39,7 @@ while True:
 
     # main calculation loop
     for price in prices:
-        # calculate macd
-        action = macd(price, macdSensitivity)
-
-        action = f20050(price)
+        # determine what the user wishes to test
 
         # send action to trade function
         if i > 30 and action != 0:
