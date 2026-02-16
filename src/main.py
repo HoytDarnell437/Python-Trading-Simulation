@@ -7,7 +7,7 @@ import numpy as np
 
 # import other files
 from algorithms.macd import macd, signalList, macdList
-from algorithms.rsi import rsi
+from algorithms.rsi import rsi, rsiList
 from trade import trade
 
 while True:
@@ -41,10 +41,10 @@ while True:
     for price in prices:
         # determine what the user wishes to test
         action = 0
-        if algorithm == 0:
+        if algorithm == 0: # call macd 
             action = macd(price, 1)
-        elif algorithm == 1:
-            print("rsi")
+        elif algorithm == 1: # call rsi
+            action = rsi(price)
 
         # send action to trade function
         if i > 30 and action != 0:
@@ -60,14 +60,14 @@ while True:
     print("Stock: ", stockSymbol)
     print("Percent Gain in Asset Value: ", f"{(100 * totalChange / startingCapital):.2f}", "%")
     print("Percent Gain in Stock Value: ", f"{(100 * (prices[-1] - prices[0]) / prices[0]):.2f}", "%")
-    ax.plot(x, prices, label="prices") # plot stock prices
+    ax.plot(x, prices, label="Price") # plot stock prices
     if algorithm == 0: # plot macd and signal
-        ax.plot(x, macdList, label="macd")
+        ax.plot(x, macdList, label="MACD")
         macdList = []
-        ax.plot(x, signalList, label="signal")
+        ax.plot(x, signalList, label="Signal")
         signalList = []
     if algorithm == 1: # plot rsi
-        ax.plot()
+        ax.plot(x, rsiList, label="RSI")
     if algorithm == 2: # plot aroon
         ax.plot()
     ax.grid(True)
