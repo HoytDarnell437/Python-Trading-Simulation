@@ -14,7 +14,7 @@ while True:
 
     # get input from user
     stockSymbol = input("Input stock symbol: ").upper()
-    algorithm = int(input("Input Algorithm Key (0: macd, 1: rsi): "))
+    algorithm = input("Input Algorithm Key (0: macd, 1: rsi): ")
     
     # import stock data
     ticker = yf.Ticker(stockSymbol)
@@ -24,8 +24,7 @@ while True:
 
     # change these variables
     prices = closePrices
-    startingCapital = 1000
-    capital = 1000 # in dollars
+    startingCapital = 1000 # in USD
     risk = 1 # percent
     macdSensitivity = 0
 
@@ -35,11 +34,16 @@ while True:
 
     # loop variables
     totalChange = 0
+    capital = startingCapital
     i = 0
 
     # main calculation loop
     for price in prices:
         # determine what the user wishes to test
+        if algorithm == 0:
+            print("macd")
+        elif algorithm == 1:
+            print("rsi")
 
         # send action to trade function
         if i > 30 and action != 0:
