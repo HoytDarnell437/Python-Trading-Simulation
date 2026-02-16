@@ -1,1 +1,0 @@
-# use this folder as a main function with a while true loop that calls the other algorithms at specific times   
