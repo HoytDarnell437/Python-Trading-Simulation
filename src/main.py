@@ -32,6 +32,8 @@ while True:
     # graphing setup
     x = np.linspace(0, len(prices), len(prices), True)
     fig, ax = plt.subplots()
+    fig, ax1 = plt.subplots()
+    fig, ax2 = plt.subplots()
 
     # loop variables
     totalChange = 0
@@ -65,18 +67,25 @@ while True:
     print("Percent Gain in Stock Value: ", f"{(100 * (prices[-1] - prices[0]) / prices[0]):.2f}", "%")
     
     ax.plot(x, prices, label="Price") # plot stock prices
+    ax1.plot(x, prices, label="Price") # plot stock prices
     if algorithm == 0: # plot macd and signal
         ax.plot(x, macdList, label="MACD")
+        ax2.plot(x, macdList, label="MACD")
         macdList.clear()
         ax.plot(x, signalList, label="Signal")
+        ax2.plot(x, signalList, label="Signal")
         signalList.clear()
     if algorithm == 1: # plot rsi
         ax.plot(x, rsiList, label="RSI")
+        ax2.plot(x, rsiList, label="RSI")
         rsiList.clear()
     if algorithm == 2: # plot aroon
         ax.plot(x, aroonList, label="AROON")
+        ax2.plot(x, aroonList, label="AROON")
         aroonList.clear()
 
     ax.grid(True)
+    ax1.grid(True)
+    ax2.grid(True)
     plt.legend()
     plt.show()
