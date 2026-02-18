@@ -8,13 +8,14 @@ import numpy as np
 # import other files
 from algorithms.macd import macd, signalList, macdList
 from algorithms.rsi import rsi, rsiList
+from algorithms.aroon import aroon, aroonList
 from trade import trade
 
 while True:
 
     # get input from user
     stockSymbol = input("Input stock symbol: ").upper()
-    algorithm = int(input("Input Algorithm Key (macd: 0, rsi: 1): "))
+    algorithm = int(input("Input Algorithm Key (macd: 0, rsi: 1, aroon: 2): "))
     
     # import stock data
     ticker = yf.Ticker(stockSymbol)
@@ -45,6 +46,8 @@ while True:
             action = macd(price, 1)
         elif algorithm == 1: # call rsi
             action = rsi(price)
+        elif algorithm == 2: # call aroon
+            action = aroon(price)
 
         # send action to trade function
         if i > 30 and action != 0:
@@ -60,16 +63,20 @@ while True:
     print("Stock: ", stockSymbol)
     print("Percent Gain in Asset Value: ", f"{(100 * totalChange / startingCapital):.2f}", "%")
     print("Percent Gain in Stock Value: ", f"{(100 * (prices[-1] - prices[0]) / prices[0]):.2f}", "%")
+
     ax.plot(x, prices, label="Price") # plot stock prices
     if algorithm == 0: # plot macd and signal
         ax.plot(x, macdList, label="MACD")
-        macdList = []
         ax.plot(x, signalList, label="Signal")
-        signalList = []
     if algorithm == 1: # plot rsi
         ax.plot(x, rsiList, label="RSI")
     if algorithm == 2: # plot aroon
-        ax.plot()
+        ax.plot(x, aroonList, label="AROON")
+
     ax.grid(True)
     plt.legend()
     plt.show()
+    macdList = []
+    signalList = []
+    rsiList = []
+    aroonList = []
