@@ -63,20 +63,20 @@ while True:
     print("Stock: ", stockSymbol)
     print("Percent Gain in Asset Value: ", f"{(100 * totalChange / startingCapital):.2f}", "%")
     print("Percent Gain in Stock Value: ", f"{(100 * (prices[-1] - prices[0]) / prices[0]):.2f}", "%")
-
+    
     ax.plot(x, prices, label="Price") # plot stock prices
     if algorithm == 0: # plot macd and signal
         ax.plot(x, macdList, label="MACD")
+        macdList.clear()
         ax.plot(x, signalList, label="Signal")
+        signalList.clear()
     if algorithm == 1: # plot rsi
         ax.plot(x, rsiList, label="RSI")
+        rsiList.clear()
     if algorithm == 2: # plot aroon
         ax.plot(x, aroonList, label="AROON")
+        aroonList.clear()
 
     ax.grid(True)
     plt.legend()
     plt.show()
-    macdList = []
-    signalList = []
-    rsiList = []
-    aroonList = []
