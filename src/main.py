@@ -1,9 +1,12 @@
-# main loop for Testing trading algorithms. Algorithms currently implemented: macd, rsi, 
+# main loop for Testing trading algorithms. Algorithms currently implemented: macd, rsi, goog
 # import libraries
 import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np 
+from timeit import timeit
+
+timeit()
 
 # import other files
 from algorithms.macd import macd, signalList, macdList
