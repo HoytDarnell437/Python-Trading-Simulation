@@ -35,8 +35,8 @@ while True:
 
     # choose proper iterator
     if algorithm == 0:
-        print(round(timeit("macd(randomPrice,macdSensitivity)", "from algorithms.macd import macd\nfrom __main__ import macdSensitivity, randomPrice", number= iterations)/iterations * (10 ** 9),2), "Nanoseconds") 
+        print(round(timeit("macd(randomPrice,macdSensitivity)", "from algorithms.macd import macd\nfrom __main__ import macdSensitivity, randomPrice", number= iterations)/iterations * (10 ** 6),4), "Microseconds") 
     elif algorithm == 1:
-        print(round(timeit("rsi(randomPrice)", "from algorithms.rsi import rsi\nfrom __main__ import randomPrice", number= iterations)/iterations * (10 ** 9),2), "Nanoseconds") 
+        print(round(timeit("rsi(randomPrice)", "from algorithms.rsi import rsi\nfrom __main__ import randomPrice", number= iterations)/iterations * (10 ** 6),4), "Microseconds") 
     elif algorithm == 2:
-        print(round(timeit("aroon(randomPrice)", "from algorithms.aroon import aroon\nfrom __main__ import randomPrice", number= iterations)/iterations * (10 ** 9),2), "Nanoseconds") 
+        print(round(timeit("aroon(randomPrice)", "from algorithms.aroon import aroon\nfrom __main__ import randomPrice", number= iterations)/iterations * (10 ** 6),4), "Microseconds") 
