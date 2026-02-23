@@ -39,5 +39,5 @@ class rsi:
         if self.avg_loss == 0:
             return 100.0
 
-        rs = self.avg_gain / self.avg_loss
-        return 100 - (100 / (1 + rs))
+        value = 100 * self.avg_gain / (self.avg_gain + self.avg_loss)
+        return value
