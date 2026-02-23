@@ -1,61 +1,43 @@
-# testing implementation of the Relative Strength Index Algorithm
-def rsi(price: float, period: int = 14):
-    """
-    Calculate the Relative Strength Index. Meant to be called iteratively.
-    
-    :param price: price of the current day
-    :type price: float
-    :param period: amount of price samples included in calculation
-    :type period: int defaults to 14 
-    """
-    global priceCount,prevPrice, prevAvgLoss, prevAvgGain
-    gain = 0
-    loss = 0
+class rsi:
+    def __init__(self, period=14):
+        self.period = period
+        self.prev_price = None
+        self.gains = []
+        self.losses = []
+        self.avg_gain = None
+        self.avg_loss = None
+        self.ready = False
 
-    priceCount += 1
+    def update(self, price: float):
+        if self.prev_price is None:
+            self.prev_price = price
+            return None  # not enough data
 
-    if priceCount == 1:
-        prevPrice = price
-        rsiList.append(0)
-        return 0
+        change = price - self.prev_price
+        self.prev_price = price
 
-    change = price - prevPrice
-    prevPrice = price
+        gain = max(change, 0)
+        loss = max(-change, 0)
 
-    if change > 0:
-        gain = change
-    else:
-        loss = -change
+        # Seeding phase
+        if not self.ready:
+            self.gains.append(gain)
+            self.losses.append(loss)
 
-    avgModifier = 1/period
+            if len(self.gains) < self.period:
+                return None  # still warming up
 
-    avgLoss = avgModifier * loss + (1 - avgModifier) * prevAvgLoss
-    avgGain = avgModifier * gain + (1 - avgModifier) * prevAvgGain
+            # Seed with simple average
+            self.avg_gain = sum(self.gains) / self.period
+            self.avg_loss = sum(self.losses) / self.period
+            self.ready = True
+        else:
+            # Wilder smoothing
+            self.avg_gain = ((self.avg_gain * (self.period - 1)) + gain) / self.period
+            self.avg_loss = ((self.avg_loss * (self.period - 1)) + loss) / self.period
 
-    prevAvgLoss = avgLoss
-    prevAvgGain = avgGain
+        if self.avg_loss == 0:
+            return 100.0
 
-    if priceCount <= period:
-        rsiList.append(0)
-        return 0
-
-    if avgLoss == 0:
-        rsi = 100.0
-    else:
-        rs = avgGain / avgLoss
-        rsi = 100 - (100 / (1 + rs))
-    
-    rsiList.append(rsi)
-
-    if rsi < 30:
-        return 2
-    elif rsi > 70:
-        return 1
-    else:
-        return 0
-
-priceCount = 0
-prevPrice = 0.0
-prevAvgLoss = 0.0
-prevAvgGain = 0.0
-rsiList = []
+        rs = self.avg_gain / self.avg_loss
+        return 100 - (100 / (1 + rs))
