@@ -6,8 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np 
 from timeit import timeit
 
-timeit()
-
 # import other files
 from algorithms.macd import macd, signalList, macdList
 from algorithms.rsi import rsi, rsiList
@@ -19,6 +17,7 @@ while True:
     # get input from user
     stockSymbol = input("Input stock symbol: ").upper()
     algorithm = int(input("Input Algorithm Key (macd: 0, rsi: 1, aroon: 2): "))
+
     
     # import stock data
     ticker = yf.Ticker(stockSymbol)
